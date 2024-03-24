@@ -1,8 +1,8 @@
 import React from 'react';
 import './Chessboard.css';
 import Tile from '../Tiles/Tile';
-const VerticalAxis  = ["1","2","3","4","5","6","7","8"];
-const HorizontalAxis = ["a","b","c","d","e","f","g","h"];
+// const VerticalAxis  = ["1","2","3","4","5","6","7","8"];
+// const HorizontalAxis = ["a","b","c","d","e","f","g","h"];
 
 interface piece{
     image :string
@@ -39,11 +39,11 @@ function grabPiece(e: React.MouseEvent){
         const y = e.clientY;
         element.style.position = "absolute";
         element.style.left =`${x}px`;
-        element.style.right =`${y}px`;
+        element.style.top =`${y}px`;
         activePiece=element;
     }
-
 }
+
 function movePiece(e: React.MouseEvent){
     if(activePiece && activePiece.classList.contains("chess-piece")){
         console.log(e);
@@ -51,7 +51,7 @@ function movePiece(e: React.MouseEvent){
         const y = e.clientY-50;
         activePiece.style.position = "absolute";
         activePiece.style.left =`${x}px`;
-        activePiece.style.right =`${y}px`;
+        activePiece.style.top =`${y}px`;
     }
 }
 export default function Chessboard() {
