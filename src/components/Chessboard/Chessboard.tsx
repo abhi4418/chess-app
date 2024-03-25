@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import './Chessboard.css';
 import Tile from '../Tiles/Tile';
 // const VerticalAxis  = ["1","2","3","4","5","6","7","8"];
@@ -30,23 +30,29 @@ for(let i =0;i<2;i++){
     pieces.push({image:"../../src/assets/knight_"+str,x:6 ,y:y_cordinate});
 }
 
+let activePiece :HTMLElement |null = null;
 
-export default function Chessboard() {
-    const chessboardRef = useRef<HTMLDivElement>(null);
-
-    let activePiece :HTMLElement |null = null;
-
-    function grabPiece(e: React.MouseEvent){
-        const element = e.target as HTMLElement;
-        if(element.classList.contains("chess-piece")){
-            const x= e.clientX-50;
-            const y = e.clientY-50;
-            element.style.position = "absolute";
-            element.style.left =`${x}px`;
-            element.style.top =`${y}px`;
-            activePiece=element;
-        }
+function grabPiece(e: React.MouseEvent){
+    const element = e.target as HTMLElement;
+    if(element.classList.contains("chess-piece")){
+        const x= e.clientX-50;
+        const y = e.clientY-50;
+        element.style.position = "absolute";
+        element.style.left =`${x}px`;
+        element.style.top =`${y}px`;
+        activePiece=element;
     }
+
+}
+
+function movePiece(e: React.MouseEvent){
+    if(activePiece && activePiece.classList.contains("chess-piece")){
+        const x= e.clientX - 50;
+        const y = e.clientY - 50;
+        activePiece.style.position = "absolute";
+        activePiece.style.left =`${x}px`;
+        activePiece.style.top =`${y}px`;
+
     
     function movePiece(e: React.MouseEvent){
         const chessboard = chessboardRef.current;
@@ -80,12 +86,13 @@ export default function Chessboard() {
             }
         }
     }
-    function dropPieces(e : React.MouseEvent){
-        if(activePiece){
-            activePiece=null;
-        }
+}
+function dropPieces(e : React.MouseEvent){
+    if(activePiece){
+        activePiece=null;
     }
-
+}
+export default function Chessboard() {
     let board = [];
 
     for(let i =7;i>=0;i--){
@@ -105,14 +112,10 @@ export default function Chessboard() {
   return (
   <div 
   onMouseMove={(e)=> movePiece(e)} 
-  onMouseDown={(e)=> grabPiece(e)}
+  onMouseDown={e=> grabPiece(e)}
   onMouseUp={(e)=> dropPieces(e)}
-  id= "Chessboard"
-  ref ={chessboardRef}
-  >
-    {board}
-  </div>
-    )
+  id= "Chessboard">{board}</div>
+  )
 }
 // hello i am just testing push to main button
 // once again
