@@ -78,11 +78,6 @@ export default function Chessboard() {
             }else{
                 activePiece.style.top =`${y}px`;
             }
-
-
-            
-
-
         }
     }
     function dropPieces(e : React.MouseEvent){
@@ -119,3 +114,5 @@ export default function Chessboard() {
   </div>
     )
 }
+// hello i am just testing push to main button
+
