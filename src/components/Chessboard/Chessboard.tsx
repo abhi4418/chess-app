@@ -31,6 +31,69 @@ for(let i =0;i<2;i++){
 }
 
 
+<<<<<<< HEAD
+=======
+function grabPiece(e: React.MouseEvent){
+    const element = e.target as HTMLElement;
+    if(element.classList.contains("chess-piece")){
+        const x= e.clientX-50;
+        const y = e.clientY-50;
+        element.style.position = "absolute";
+        element.style.left =`${x}px`;
+        element.style.top =`${y}px`;
+        activePiece=element;
+    }
+
+}
+
+function movePiece(e: React.MouseEvent){
+    if(activePiece && activePiece.classList.contains("chess-piece")){
+        const x= e.clientX - 50;
+        const y = e.clientY - 50;
+        activePiece.style.position = "absolute";
+        activePiece.style.left =`${x}px`;
+        activePiece.style.top =`${y}px`;
+
+    
+    function movePiece(e: React.MouseEvent){
+        const chessboard = chessboardRef.current;
+        if(activePiece && chessboard){
+            const minx = chessboard.offsetLeft-25;
+            const maxy = chessboard.offsetTop +chessboard.clientHeight-75;
+
+            
+            const maxx = chessboard.offsetLeft +chessboard.clientWidth-75;
+            const miny = chessboard.offsetTop-25;
+
+            const x= e.clientX - 50;
+            const y = e.clientY - 50;
+            activePiece.style.position = "absolute";
+            // activePiece.style.left =`${x}px`;
+            // activePiece.style.top =`${y}px`;
+            if(x<minx){
+                activePiece.style.left =`${minx}px`;
+            }else if(x>maxx){
+                activePiece.style.left =`${maxx}px`;
+            }else{
+                activePiece.style.left =`${x}px`;
+            }
+
+            if(y<miny){
+                activePiece.style.top =`${miny}px`;
+            }else if(y>maxy){
+                activePiece.style.top =`${maxy}px`;
+            }else{
+                activePiece.style.top =`${y}px`;
+            }
+        }
+    }
+}
+function dropPieces(e : React.MouseEvent){
+    if(activePiece){
+        activePiece=null;
+    }
+}
+>>>>>>> e836945987629201fc8c174a32c2dac54f16df55
 export default function Chessboard() {
     const chessboardRef = useRef<HTMLDivElement>(null);
 
@@ -114,4 +177,10 @@ export default function Chessboard() {
   </div>
     )
 }
+<<<<<<< HEAD
+=======
+// hello i am just testing push to main button
+// once again
+
+>>>>>>> e836945987629201fc8c174a32c2dac54f16df55
 
