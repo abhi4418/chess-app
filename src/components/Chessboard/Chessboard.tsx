@@ -42,6 +42,7 @@ function grabPiece(e: React.MouseEvent){
         element.style.top =`${y}px`;
         activePiece=element;
     }
+
 }
 
 function movePiece(e: React.MouseEvent){
@@ -51,6 +52,39 @@ function movePiece(e: React.MouseEvent){
         activePiece.style.position = "absolute";
         activePiece.style.left =`${x}px`;
         activePiece.style.top =`${y}px`;
+
+    
+    function movePiece(e: React.MouseEvent){
+        const chessboard = chessboardRef.current;
+        if(activePiece && chessboard){
+            const minx = chessboard.offsetLeft-25;
+            const maxy = chessboard.offsetTop +chessboard.clientHeight-75;
+
+            
+            const maxx = chessboard.offsetLeft +chessboard.clientWidth-75;
+            const miny = chessboard.offsetTop-25;
+
+            const x= e.clientX - 50;
+            const y = e.clientY - 50;
+            activePiece.style.position = "absolute";
+            // activePiece.style.left =`${x}px`;
+            // activePiece.style.top =`${y}px`;
+            if(x<minx){
+                activePiece.style.left =`${minx}px`;
+            }else if(x>maxx){
+                activePiece.style.left =`${maxx}px`;
+            }else{
+                activePiece.style.left =`${x}px`;
+            }
+
+            if(y<miny){
+                activePiece.style.top =`${miny}px`;
+            }else if(y>maxy){
+                activePiece.style.top =`${maxy}px`;
+            }else{
+                activePiece.style.top =`${y}px`;
+            }
+        }
     }
 }
 function dropPieces(e : React.MouseEvent){
@@ -83,3 +117,7 @@ export default function Chessboard() {
   id= "Chessboard">{board}</div>
   )
 }
+// hello i am just testing push to main button
+// once again
+
+
