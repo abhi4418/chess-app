@@ -10,10 +10,10 @@ export default function Tile({number , image}:Props){
         return <div className="tile black-tile">
                 {image && <div style={{backgroundImage: `url(${image})`}} className='chess-piece'></div>}
             </div>
-    }else{
+    }
+    else{
         return <div className="tile white-tile">
            {image && <div style={{backgroundImage: `url(${image})`}} className='chess-piece'></div>}
             </div>
     }
-    
 }
