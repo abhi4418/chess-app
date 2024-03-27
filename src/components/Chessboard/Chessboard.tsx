@@ -77,95 +77,109 @@ export default function Chessboard() {
             setActivePiece(element);
         }
     }
-    
-    function movePiece(e: React.MouseEvent){
-        const chessboard = chessboardRef.current;
-        if(activePiece && chessboard){
-            const minx = chessboard.offsetLeft-25;
-            const maxy = chessboard.offsetTop +chessboard.clientHeight-75;
 
-            
-            const maxx = chessboard.offsetLeft +chessboard.clientWidth-75;
-            const miny = chessboard.offsetTop-25;
+    function movePiece(e: React.MouseEvent) {
+        const chessboard = chessboardRef.current
+        if (activePiece && chessboard) {
+            const minx = chessboard.offsetLeft - 25
+            const maxy = chessboard.offsetTop + chessboard.clientHeight - 75
 
-            const x= e.clientX - 50;
-            const y = e.clientY - 50;
-            activePiece.style.position = "absolute";
+            const maxx = chessboard.offsetLeft + chessboard.clientWidth - 75
+            const miny = chessboard.offsetTop - 25
+
+            const x = e.clientX - 50
+            const y = e.clientY - 50
+            activePiece.style.position = "absolute"
             // activePiece.style.left =`${x}px`;
             // activePiece.style.top =`${y}px`;
-            if(x<minx){
-                activePiece.style.left =`${minx}px`;
-            }else if(x>maxx){
-                activePiece.style.left =`${maxx}px`;
-            }else{
-                activePiece.style.left =`${x}px`;
+            if (x < minx) {
+                activePiece.style.left = `${minx}px`
+            } else if (x > maxx) {
+                activePiece.style.left = `${maxx}px`
+            } else {
+                activePiece.style.left = `${x}px`
             }
 
-            if(y<miny){
-                activePiece.style.top =`${miny}px`;
-            }else if(y>maxy){
-                activePiece.style.top =`${maxy}px`;
-            }else{
-                activePiece.style.top =`${y}px`;
+            if (y < miny) {
+                activePiece.style.top = `${miny}px`
+            } else if (y > maxy) {
+                activePiece.style.top = `${maxy}px`
+            } else {
+                activePiece.style.top = `${y}px`
             }
         }
     }
-    function dropPieces(e : React.MouseEvent){
-        // console.log(e);
-        const chessboard =chessboardRef.current;
-        if(activePiece && chessboard){
-            const x = Math.floor((e.clientX-chessboard.offsetLeft)/100);
-            const y = Math.abs(Math.ceil((e.clientY-chessboard.offsetTop-800)/100));
-           
-            setPieces((value)=>{
 
-                const pieces =value.map(p=>{
-                    if(p.x===gridX && p.y ===gridY){
-                        const validMove=referee.isValidMove(gridX,gridY,x,y,p.type, p.team,value);
+    function dropPieces(e: React.MouseEvent) {
+        const chessboard = chessboardRef.current ;
+        if (activePiece && chessboard) {
+            const x= Math.floor((e.clientX - chessboard.offsetLeft)/100);
+            const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800)/100)) ;
+            
+            const currentPiece = pieces.find(p=>p.x===gridX &&p.y===gridY);
+          
+            // console.log(currentPiece);
+            // console.log(attackedPiece);
+            if(currentPiece){
+                const validMove = referee.isValidMove(gridX,gridY,x,y,currentPiece.type,currentPiece.team,pieces);
+                
+                // REDUCE FUNCTION
+                // RESULTS => array of results 
+                // PIECE => the current piece that we are handling 
+                if(validMove){
+                    // UPDATES THE PIECE POSITION
+                    // AND IF PIECE IS ATTACKED ,REMOVE IT
 
-                        if(validMove){
-                            p.x=x;
-                            p.y=y;
-
-                        }else{
-                            activePiece.style.position = 'relative';
-                            activePiece.style.removeProperty('top');
-                            activePiece.style.removeProperty('left');
+                    const updatedPieces = pieces.reduce((results,piece)=>{
+                        if(piece.x ===gridX &&  piece.y === gridY ){
+                            piece.x =x;
+                            piece.y = y;
+                            results.push(piece);
+                        }else if(!(piece.x === x && piece.y ===y)){
+                            results.push(piece);
                         }
-                    }
-                    return p;
-                })
-                return pieces;
-            });
-            setActivePiece(null);
+                        return results;
+                    },[] as Piece[])
+                    
+                    setPieces(updatedPieces);
+            
+                }else{
+                    // RESET THE PIECE POSITION
+                    activePiece.style.position = 'relative' ;
+                    activePiece.style.removeProperty('top') ;
+                    activePiece.style.removeProperty('left') ; 
+                }
+            }
+       
+            setActivePiece(null) ;
         }
+
     }
 
-    let board = [];
-    for(let i =7;i>=0;i--){
-        for(let j=0;j<8;j++){
+    let board = []
 
-            const number = i+j;
-            let image = undefined;
-            pieces.forEach(p=>{
-                if(p.x===j && p.y===i){
-                    image = p.image;
+    for (let i = 7; i >= 0; i--) {
+        for (let j = 0; j < 8; j++) {
+            const number = i + j
+            let image = undefined
+            pieces.forEach((p) => {
+                if (p.x === j && p.y === i) {
+                    image = p.image
                 }
             })
-           board.push(<Tile key={`${i},${j}`}image ={image} number={number}/>)
+            board.push(<Tile key={`${i},${j}`} image={image} number={number} />)
         }
     }
 
-  return (
-  <div 
-  onMouseMove={(e)=> movePiece(e)} 
-  onMouseDown={(e)=> grabPiece(e)}
-  onMouseUp={(e)=> dropPieces(e)}
-  id= "Chessboard"
-  ref ={chessboardRef}
-  >
-    {board}
-  </div>
+    return (
+        <div
+            onMouseMove={(e) => movePiece(e)}
+            onMouseDown={(e) => grabPiece(e)}
+            onMouseUp={(e) => dropPieces(e)}
+            id="Chessboard"
+            ref={chessboardRef}
+        >
+            {board}
+        </div>
     )
 }
-
